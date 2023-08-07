@@ -1,0 +1,15 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.majorProject.iesApp.adminModule.repo.PlanRepo;
+import com.majorProject.iesApp.adminModule.service.PlanService;
+
+@Service
+public class PlanServiceImpl implements PlanService{
+
+	@Autowired
+	private PlanRepo repo;
+	
+}

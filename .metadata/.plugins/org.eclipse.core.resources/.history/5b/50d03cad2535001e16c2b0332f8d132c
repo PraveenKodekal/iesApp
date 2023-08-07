@@ -1,0 +1,5 @@
+package com.majorProject.iesApp.adminModule.repo;
+
+public interface UserRepository {
+
+}

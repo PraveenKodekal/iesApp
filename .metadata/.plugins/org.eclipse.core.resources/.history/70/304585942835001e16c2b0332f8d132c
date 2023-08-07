@@ -1,0 +1,5 @@
+package com.majorProject.iesApp.adminModule.controller;
+
+public class UserController {
+
+}

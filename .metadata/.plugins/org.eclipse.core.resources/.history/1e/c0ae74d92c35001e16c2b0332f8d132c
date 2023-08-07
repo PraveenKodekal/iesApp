@@ -1,0 +1,16 @@
+package com.majorProject.iesApp.adminModule.service;
+
+import java.util.List;
+
+import com.majorProject.iesApp.adminModule.binding.UserAccountForm;
+import com.majorProject.iesApp.adminModule.entity.UserEntity;
+
+
+public interface AccountService {
+	
+	
+	public boolean createUser(UserAccountForm userForm);
+	
+	//to view accounts
+	List<UserAccountForm> fetchUserAccounts();
+}

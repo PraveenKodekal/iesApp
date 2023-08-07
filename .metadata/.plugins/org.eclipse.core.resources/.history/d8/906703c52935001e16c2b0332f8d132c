@@ -1,0 +1,5 @@
+package com.majorProject.iesApp.adminModule.utils;
+
+public class AppConstants {
+
+}

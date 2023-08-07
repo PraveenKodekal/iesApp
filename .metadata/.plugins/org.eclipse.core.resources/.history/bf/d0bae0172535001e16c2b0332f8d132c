@@ -1,0 +1,29 @@
+package com.majorProject.iesApp.adminModule.entity;
+
+import java.time.LocalDate;
+
+public class PlansEntity {
+	
+	private Integer userID;
+	private String userName;
+	private String userPwd;
+	private Integer userPhNum;
+	private String userGender;
+	
+	
+	private LocalDate UserDOB;
+	private Integer userSSN;
+	private boolean activeStatus;
+	private String RoleId;
+	
+	private LocalDate createdDate;
+	private LocalDate updatedDate;
+	
+	
+	
+	
+	
+	
+	
+
+}

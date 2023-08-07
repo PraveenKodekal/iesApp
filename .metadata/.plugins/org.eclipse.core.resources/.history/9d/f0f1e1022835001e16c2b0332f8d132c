@@ -1,0 +1,12 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import java.awt.desktop.UserSessionListener;
+
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class UserRestServiceImpl implements UserRestService {
+
+	
+}

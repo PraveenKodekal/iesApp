@@ -1,0 +1,12 @@
+package com.majorProject.iesApp.adminModule.service;
+
+import com.majorProject.iesApp.adminModule.binding.UserAccountForm;
+import com.majorProject.iesApp.adminModule.entity.UserEntity;
+
+public interface AccountService {
+	
+	public UserEntity addUser();
+	
+	public String createUser(UserAccountForm userForm);
+
+}
