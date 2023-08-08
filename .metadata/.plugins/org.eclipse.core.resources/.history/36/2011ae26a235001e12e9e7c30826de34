@@ -1,0 +1,22 @@
+package com.majorProject.iesApp.adminModule.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import com.majorProject.iesApp.adminModule.entity.UserEntity;
+
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+	
+	@Query("update UserEntity set activeStatus=:status where userId=:userId")
+	public Integer updateAccStatus(Integer userId, String status);
+
+
+	public UserEntity findByEmail(String email);
+	
+	public UserEntity findByEmailAndUserPwd(String email, String userPwd);
+	
+	
+	
+}

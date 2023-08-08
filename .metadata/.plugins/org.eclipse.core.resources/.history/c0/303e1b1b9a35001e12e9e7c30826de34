@@ -1,0 +1,126 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.majorProject.iesApp.adminModule.binding.UnlockAccountForm;
+import com.majorProject.iesApp.adminModule.binding.UserAccountForm;
+import com.majorProject.iesApp.adminModule.entity.UserEntity;
+import com.majorProject.iesApp.adminModule.repo.UserRepository;
+import com.majorProject.iesApp.adminModule.service.AccountService;
+import com.majorProject.iesApp.adminModule.utils.emailUtils;
+
+/**
+ * @author Admin
+ *
+ */
+@Service
+public class AccountServiceImpl implements AccountService {
+
+	@Autowired
+	private UserRepository repo;
+
+	@Autowired
+	private emailUtils mail;
+
+	/**
+	 * @implNote userCreation
+	 *
+	 */
+	@Override
+	public boolean createUser(UserAccountForm userForm) {
+
+		UserEntity user = new UserEntity();
+		BeanUtils.copyProperties(userForm, user);
+
+		// set Random Password
+		user.setUserPwd(OTP().toString());
+
+		// set acc Status
+		user.setActiveStatus("LOCKED");
+		user.setAccountSwch("Y");
+
+		repo.save(user);
+
+		// send Email
+		String body = "";
+		String subject = "";
+
+		boolean status = mail.send(subject, body, userForm.getEmail());
+
+		return status;
+	}
+
+	/**
+	 * @implNote get All the user
+	 *
+	 */
+	@Override
+	public List<UserAccountForm> fetchUserAccounts() {
+
+		// get all the users from repo
+		List<UserEntity> userEntity = repo.findAll();
+		
+		
+		List<UserAccountForm> allUsers= new ArrayList<UserAccountForm>();
+		
+		//copy the entity data into binding object
+		for(UserEntity user : userEntity) {
+			
+			UserAccountForm allUserForm= new UserAccountForm();
+			BeanUtils.copyProperties(user, allUserForm);
+			allUsers.add(allUserForm);
+			
+		}
+
+		return allUsers;
+	}
+
+	@Override
+	public UserAccountForm userAccIdById(Integer userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String changeAccStatus(Integer accId, String status) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String unlockAcc(UnlockAccountForm unlockForm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// To generate Otp
+
+	private char[] OTP() {
+
+		int len = 6;
+		System.out.println("Generating OTP using random() : ");
+		System.out.print("You OTP is : ");
+
+		// Using numeric values
+		String numbers = "0123456789";
+
+		// Using random method
+		Random rndm_method = new Random();
+
+		char[] otp = new char[len];
+
+		for (int i = 0; i < len; i++) {
+			// Use of charAt() method : to get character value
+			// Use of nextInt() as it is scanning the value as int
+			otp[i] = numbers.charAt(rndm_method.nextInt(numbers.length()));
+		}
+		return otp;
+	}
+
+}

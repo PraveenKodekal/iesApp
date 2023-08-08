@@ -1,0 +1,9 @@
+package com.majorProject.iesApp.adminModule.utils;
+
+public class emailUtils {
+	
+	public boolean sendMail(String subject, String body, String to) {
+		return false;
+	}
+
+}

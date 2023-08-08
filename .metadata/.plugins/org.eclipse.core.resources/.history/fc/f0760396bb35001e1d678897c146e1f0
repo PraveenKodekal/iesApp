@@ -1,0 +1,43 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.majorProject.iesApp.adminModule.binding.DashboardcardForm;
+import com.majorProject.iesApp.adminModule.binding.LoginForm;
+import com.majorProject.iesApp.adminModule.entity.UserEntity;
+import com.majorProject.iesApp.adminModule.repo.UserRepository;
+import com.majorProject.iesApp.adminModule.service.UserService;
+
+@Service
+public class UserServiceImpl implements UserService {
+	
+	@Autowired
+	private UserRepository repo;
+
+	@Override
+	public String userLogin(LoginForm loginForm) {
+		
+		UserEntity entity= repo.findByEmailAndUserPwd(loginForm.getEmail(), loginForm.getUserPwd());
+		
+		if(entity==null) {
+			return "Invalid Credentials";
+		}
+		
+		return null;
+	}
+
+	@Override
+	public String recoverPassword(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DashboardcardForm fetchData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+}

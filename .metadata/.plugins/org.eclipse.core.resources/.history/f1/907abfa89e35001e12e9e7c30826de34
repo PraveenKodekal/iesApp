@@ -1,0 +1,48 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.majorProject.iesApp.adminModule.binding.PlanForm;
+import com.majorProject.iesApp.adminModule.entity.PlansEntity;
+import com.majorProject.iesApp.adminModule.repo.PlanRepo;
+import com.majorProject.iesApp.adminModule.service.PlanService;
+
+@Service
+public class PlanServiceImpl implements PlanService{
+
+	@Autowired
+	private PlanRepo repo;
+
+	@Override
+	public boolean createPlan(PlanForm form) {
+		
+		PlansEntity entity= new PlansEntity();
+		BeanUtils.copyProperties(form, entity);
+		entity.setActiveSw("Y");
+		System.out.println("Plan Created");
+		return true;
+	}
+
+	@Override
+	public List<PlanForm> fetchPlans() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PlanForm planEditById(Integer planId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String changePlanStatus(Integer planId, String planStatus) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}

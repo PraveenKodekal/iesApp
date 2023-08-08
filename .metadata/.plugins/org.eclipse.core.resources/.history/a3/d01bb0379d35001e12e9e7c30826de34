@@ -1,0 +1,13 @@
+package com.majorProject.iesApp.adminModule.utils;
+
+import org.springframework.mail.javamail.JavaMailSender;
+
+public class emailUtils {
+	
+	private JavaMailSender sendMail;
+	
+	public boolean send(String subject, String body, String to) {
+		return false;
+	}
+
+}

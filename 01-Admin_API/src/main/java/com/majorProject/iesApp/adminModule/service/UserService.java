@@ -7,7 +7,7 @@ public interface UserService {
 	
 	public String userLogin(LoginForm loginForm);
 	
-	public String recoverPassword(String email);
+	public boolean recoverPassword(String email);
 	
 	public DashboardcardForm fetchData();
 	

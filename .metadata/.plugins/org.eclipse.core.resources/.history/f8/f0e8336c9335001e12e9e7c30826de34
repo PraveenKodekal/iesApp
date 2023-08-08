@@ -1,0 +1,47 @@
+package com.majorProject.iesApp.adminModule.entity;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+@Entity
+
+public class UserEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="user_id")
+	private Integer userID;
+	private String userName;
+	private String email;
+	private String userPwd;
+	private Integer userPhNum;
+	private String userGender;
+
+	private LocalDate dob;
+	private Integer userSSN;
+	private boolean activeStatus;
+	
+	
+	private String RoleId;
+
+	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+	private List<PlansEntity> plans;
+	
+	
+	
+	
+
+}

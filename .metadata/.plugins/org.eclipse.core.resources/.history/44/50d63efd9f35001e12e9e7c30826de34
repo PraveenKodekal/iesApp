@@ -1,0 +1,72 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.majorProject.iesApp.adminModule.binding.PlanForm;
+import com.majorProject.iesApp.adminModule.entity.PlansEntity;
+import com.majorProject.iesApp.adminModule.repo.PlanRepo;
+import com.majorProject.iesApp.adminModule.service.PlanService;
+
+/**
+ * @author Admin
+ *
+ */
+@Service
+public class PlanServiceImpl implements PlanService {
+
+	@Autowired
+	private PlanRepo repo;
+
+	/**
+	 * @author create plan
+	 *
+	 */
+
+	@Override
+	public boolean createPlan(PlanForm form) {
+
+		PlansEntity entity = new PlansEntity();
+		BeanUtils.copyProperties(form, entity);
+		entity.setActiveSw("Y");
+		System.out.println("Plan Created");
+		return true;
+	}
+
+	/**
+	 * @author view All Plans
+	 *
+	 */
+	@Override
+	public List<PlanForm> fetchPlans() {
+
+		List<PlansEntity> entity = repo.findAll();
+
+		List<PlanForm> formData = new ArrayList<PlanForm>();
+
+		for (PlansEntity plans : entity) {
+			PlanForm planForm = new PlanForm();
+			BeanUtils.copyProperties(plans, planForm);
+			formData.add(planForm);
+
+		}
+		return formData;
+	}
+
+	@Override
+	public PlanForm planEditById(Integer planId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String changePlanStatus(Integer planId, String planStatus) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

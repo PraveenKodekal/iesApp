@@ -1,0 +1,66 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.majorProject.iesApp.adminModule.binding.DashboardcardForm;
+import com.majorProject.iesApp.adminModule.binding.LoginForm;
+import com.majorProject.iesApp.adminModule.entity.UserEntity;
+import com.majorProject.iesApp.adminModule.repo.UserRepository;
+import com.majorProject.iesApp.adminModule.service.UserService;
+import com.majorProject.iesApp.adminModule.utils.EmailUtils;
+import com.majorProject.iesApp.adminModule.utils.emailUtils;
+
+@Service
+public class UserServiceImpl implements UserService {
+	
+	@Autowired
+	private UserRepository repo;
+	
+	@Autowired
+	private EmailUtils utils;
+
+	@Override
+	public String userLogin(LoginForm loginForm) {
+		
+		UserEntity entity= repo.findByEmailAndUserPwd(loginForm.getEmail(), loginForm.getUserPwd());
+		
+		if(entity==null) {
+			return "Invalid Credentials";
+		}
+		
+		if("Y".equals(entity.getAccountSwch()) && "UNLOCKED".equals(entity.getActiveStatus())) {
+			return "Login Success";
+			
+		}else {
+			return "Account Locked Or InActive";
+		}
+		
+	}
+
+	
+	// To recover password
+	@Override
+	public boolean recoverPassword(String email) {
+		UserEntity entity=repo.findByEmail(email);
+
+		if(null== entity) {
+			return false;
+		}else {
+			String body="";
+			String subject="";
+			
+			return utils.sendEmail(email, subject, body);
+			
+		}
+	}
+
+	@Override
+	public DashboardcardForm fetchData() {
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+}

@@ -1,40 +1,82 @@
 package com.majorProject.iesApp.adminModule.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 @Entity
 @Getter
 @Setter
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="user_id")
 	private Integer userID;
 	private String userName;
+	private String email;
 	private String userPwd;
-	private Integer userPhNum;
+	private Long userPhNum;
 	private String userGender;
 
-	private LocalDate UserDOB;
-	private Integer userSSN;
-	private boolean activeStatus;
-	private String RoleId;
+	private LocalDate dob;
+	private Long userSSN;
+	private String activeStatus;
+	private String accountSwch;
+	
+	
+	private Integer RoleId;
 
-	private LocalDate createdDate;
-	private LocalDate updatedDate;
+	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+	private List<PlansEntity> plans;
+	/*
+	 * public Integer getUserID() { return userID; }
+	 * 
+	 * public void setUserID(Integer userID) { this.userID = userID; }
+	 * 
+	 * public String getUserName() { return userName; }
+	 * 
+	 * public void setUserName(String userName) { this.userName = userName; }
+	 * 
+	 * public String getEmail() { return email; }
+	 * 
+	 * public void setEmail(String email) { this.email = email; }
+	 * 
+	 * public String getUserPwd() { return userPwd; }
+	 * 
+	 * public void setUserPwd(String userPwd) { this.userPwd = userPwd; }
+	 * 
+	 * public Integer getUserPhNum() { return userPhNum; }
+	 * 
+	 * public void setUserPhNum(Integer userPhNum) { this.userPhNum = userPhNum; }
+	 * 
+	 * public String getUserGender() { return userGender; }
+	 * 
+	 * public void setUserGender(String userGender) { this.userGender = userGender;
+	 * }
+	 * 
+	 * public String getRoleId() { return RoleId; }
+	 * 
+	 * public void setRoleId(String roleId) { RoleId = roleId; }
+	 * 
+	 * public List<PlansEntity> getPlans() { return plans; }
+	 * 
+	 * public void setPlans(List<PlansEntity> plans) { this.plans = plans; }
+	 * 
+	 * 
+	 * 
+	 */
 
 }

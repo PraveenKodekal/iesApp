@@ -1,0 +1,13 @@
+package com.majorProject.iesApp.adminModule.binding;
+
+import lombok.Data;
+
+@Data
+public class DashboardcardForm {
+	
+	private Integer plansCnt;
+	private Integer approveCnt;
+	private Integer deniedCnt;
+	private Integer benefitAmtGiven;
+
+}

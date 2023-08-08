@@ -1,0 +1,54 @@
+package com.majorProject.iesApp.adminModule.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.majorProject.iesApp.adminModule.binding.PlanForm;
+import com.majorProject.iesApp.adminModule.service.impl.PlanServiceImpl;
+
+@RestController
+public class PlanController {
+	
+	@Autowired
+	private PlanServiceImpl service;
+	
+	@PostMapping("/plans")
+	public ResponseEntity<String> addPlans(@RequestBody PlanForm plans){
+		boolean planEntity=service.createPlan(plans);
+		
+		if(planEntity) {
+			return new ResponseEntity<>("Plan created",HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<>("Plan not created",HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+	// to view All Plans
+	@GetMapping("/allPlans")
+	public ResponseEntity<List<PlanForm>> getAllPlans(){
+		return new ResponseEntity<List<PlanForm>>(service.fetchPlans(), HttpStatus.OK);
+	}
+	
+	//to edit by id
+	@GetMapping("/editPlan/{planId}")
+	public ResponseEntity<PlanForm> planById(@PathVariable("planId") Integer planId){
+		return new ResponseEntity<PlanForm>(service.planEditById(planId), HttpStatus.OK);
+	}
+	
+	//update 
+	@PutMapping("/updatePlan/{planId}/{statsu}")
+	public ResponseEntity<List<PlanForm>> updatePlans(@PathVariable("planId") Integer planId, @PathVariable("status") String status){
+		return
+	}
+
+}

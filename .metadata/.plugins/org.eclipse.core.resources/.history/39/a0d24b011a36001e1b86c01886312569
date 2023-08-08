@@ -1,0 +1,41 @@
+package com.majorProject.iesApp.adminModule.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.majorProject.iesApp.adminModule.binding.UserAccountForm;
+import com.majorProject.iesApp.adminModule.entity.UserEntity;
+import com.majorProject.iesApp.adminModule.service.impl.AccountServiceImpl;
+
+@RestController
+public class AccountController {
+	
+	@Autowired
+	private AccountServiceImpl service;
+	
+	@PostMapping("/user")
+	public ResponseEntity<String> createUserAccount(@RequestBody UserAccountForm userForm){
+		
+		 boolean status= service.createUser(userForm);
+		 if(status) {
+			 return new ResponseEntity<>("Accont Created ", HttpStatus.CREATED);
+		 }
+		 else {
+			 return new ResponseEntity<>("Account Not Created ", HttpStatus.INTERNAL_SERVER_ERROR);
+		 }
+				
+	}
+	
+	public ResponseEntity<List<UserEntity>> allUsers(){
+		List<UserAccountForm> status = service.fetchUserAccounts();
+		return status;
+	}
+	
+
+}

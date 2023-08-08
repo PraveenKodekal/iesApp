@@ -2,6 +2,7 @@ package com.majorProject.iesApp.adminModule.service;
 
 import java.util.List;
 
+import com.majorProject.iesApp.adminModule.binding.UnlockAccountForm;
 import com.majorProject.iesApp.adminModule.binding.UserAccountForm;
 
 public interface AccountService {
@@ -18,5 +19,7 @@ public interface AccountService {
 	// status
 	public String changeAccStatus(Integer accId, String status);
 	
+	// unlock
+	public String unlockAcc(UnlockAccountForm unlockForm);
 	
 }
