@@ -1,0 +1,106 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.majorProject.iesApp.adminModule.binding.DashboardcardForm;
+import com.majorProject.iesApp.adminModule.binding.LoginForm;
+import com.majorProject.iesApp.adminModule.entity.EligibilityEntity;
+import com.majorProject.iesApp.adminModule.entity.PlansEntity;
+import com.majorProject.iesApp.adminModule.entity.UserEntity;
+import com.majorProject.iesApp.adminModule.repo.EligibleRepo;
+import com.majorProject.iesApp.adminModule.repo.PlanRepo;
+import com.majorProject.iesApp.adminModule.repo.UserRepository;
+import com.majorProject.iesApp.adminModule.service.UserService;
+import com.majorProject.iesApp.adminModule.utils.EmailUtils;
+
+@Service
+public class UserServiceImpl implements UserService {
+	
+	@Autowired
+	private UserRepository repo;
+	
+	@Autowired
+	private EmailUtils utils;
+	
+	
+	@Autowired
+	private PlanRepo planRepo;
+	
+	
+	@Autowired
+	private EligibleRepo eligRepo;
+
+	@Override
+	public String userLogin(LoginForm loginForm) {
+		
+		UserEntity entity= repo.findByEmailAndUserPwd(loginForm.getEmail(), loginForm.getUserPwd());
+		
+		if(entity==null) {
+			return "Invalid Credentials";
+		}
+		
+		if("Y".equals(entity.getAccountSwch()) && "UNLOCKED".equals(entity.getActiveStatus())) {
+			return "success";
+			
+		}else {
+			return "Account Locked Or InActive";
+		}
+		
+	}
+	
+	
+
+	
+	// To recover password
+	@Override
+	public boolean recoverPassword(String email) {
+		UserEntity entity=repo.findByEmail(email);
+
+		if(null== entity) {
+			return false;
+		}else {
+			String body="";
+			String subject="";
+			
+			return utils.sendEmail(email, subject, body);
+			
+		}
+	}
+
+	// fetch the dashboard data
+	
+	@Override
+	public DashboardcardForm fetchData() {
+		// this will count the number of plans available 
+		 long count=repo.count();
+		
+		List<EligibilityEntity> eligList= eligRepo.findAll();
+		
+		Long approvedCount=
+				eligList.stream().filter(ed->ed.getPlanStatus().equals("AP")).count();
+		
+		
+		Long deniedCount=
+				eligList.stream().filter(ed->ed.getPlanStatus().equals("DN")).count();
+	
+		Double totalBenefitAmt=
+				eligList.stream().mapToDouble(ed-> ed.getBenefitAmt()).sum();
+
+
+		
+		DashboardcardForm dashCard= new DashboardcardForm();
+		dashCard.setPlansCnt(count);
+		dashCard.setApproveCnt(0);
+		dashCard.setDeniedCnt(0);
+		dashCard.setBenefitAmtGiven(0);
+		
+		return dashCard;
+		
+		
+	}
+
+	
+}

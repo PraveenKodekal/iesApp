@@ -2,11 +2,13 @@ package com.majorProject.iesApp.adminModule.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.majorProject.iesApp.adminModule.binding.DashboardcardForm;
 import com.majorProject.iesApp.adminModule.binding.LoginForm;
+import com.majorProject.iesApp.adminModule.binding.UserAccountForm;
 import com.majorProject.iesApp.adminModule.entity.EligibilityEntity;
 import com.majorProject.iesApp.adminModule.entity.PlansEntity;
 import com.majorProject.iesApp.adminModule.entity.UserEntity;
@@ -43,13 +45,15 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		if("Y".equals(entity.getAccountSwch()) && "UNLOCKED".equals(entity.getActiveStatus())) {
-			return "Login Success";
+			return "success";
 			
 		}else {
 			return "Account Locked Or InActive";
 		}
 		
 	}
+	
+	
 
 	
 	// To recover password
@@ -98,6 +102,18 @@ public class UserServiceImpl implements UserService {
 		return dashCard;
 		
 		
+	}
+
+
+
+
+	@Override
+	public UserAccountForm getUserByEmail(String email) {
+		UserEntity userEntity= repo.findByEmail(email);
+		
+		UserAccountForm user= new UserAccountForm();
+		BeanUtils.copyProperties(userEntity, user);
+		return user;
 	}
 
 	

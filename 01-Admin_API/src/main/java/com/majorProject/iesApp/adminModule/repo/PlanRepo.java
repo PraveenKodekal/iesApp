@@ -9,6 +9,6 @@ import com.majorProject.iesApp.adminModule.entity.PlansEntity;
 @Repository
 public interface PlanRepo extends JpaRepository<PlansEntity, Integer>{
 
-	@Query("update PlanEntity set planStatus=:status where planId=:planId")
+	@Query("update PlansEntity set planStatus=:status where planId=:planId")
 	public Integer updatePlanStatus(Integer planId, String status);
 }

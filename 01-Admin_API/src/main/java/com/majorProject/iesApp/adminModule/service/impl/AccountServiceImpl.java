@@ -1,9 +1,12 @@
 package com.majorProject.iesApp.adminModule.service.impl;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
 	private UserRepository repo;
 
 	@Autowired
-	private EmailUtils mail;
+	private EmailUtils emailUtils;
 
 	/**
 	 * @implNote userCreation
@@ -48,13 +51,27 @@ public class AccountServiceImpl implements AccountService {
 
 		repo.save(user);
 
-		// send Email
-		String body = "";
-		String subject = "";
+		
+		// send email
+				String subject = "User Registration";
+				String body = readEmailBody("REG_EMAIL_BODY.txt", user);
+				return emailUtils.sendEmail(subject, body, userForm.getEmail());
+		
+	}
 
-		boolean status = mail.sendEmail(subject, body, userForm.getEmail());
-
-		return status;
+	private String readEmailBody(String filename, UserEntity user) {
+		StringBuilder sb = new StringBuilder();
+		try (Stream<String> lines = Files.lines(Paths.get(filename))) {
+			lines.forEach(line -> {
+				line = line.replace("${FNAME}", user.getUserName());
+				line = line.replace("${TEMP_PWD}", user.getUserPwd());
+				line = line.replace("${EMAIL}", user.getEmail());
+				sb.append(line);
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
 	}
 
 	/**

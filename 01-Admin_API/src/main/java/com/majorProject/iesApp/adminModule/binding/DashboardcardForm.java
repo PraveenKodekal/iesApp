@@ -11,7 +11,7 @@ public class DashboardcardForm {
 	private Integer approveCnt;
 	private Integer deniedCnt;
 	private Integer benefitAmtGiven;
-	
+	//contain all the info to display all the user data
 	private UserAccountForm user;
 
 }
