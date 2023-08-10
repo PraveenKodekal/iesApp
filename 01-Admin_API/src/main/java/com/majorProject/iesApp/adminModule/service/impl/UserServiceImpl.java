@@ -1,6 +1,8 @@
 package com.majorProject.iesApp.adminModule.service.impl;
 
+import java.nio.file.Files;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +11,16 @@ import org.springframework.stereotype.Service;
 import com.majorProject.iesApp.adminModule.binding.DashboardcardForm;
 import com.majorProject.iesApp.adminModule.binding.LoginForm;
 import com.majorProject.iesApp.adminModule.binding.UserAccountForm;
+import com.majorProject.iesApp.adminModule.constants.AppConstants;
 import com.majorProject.iesApp.adminModule.entity.EligibilityEntity;
-import com.majorProject.iesApp.adminModule.entity.PlansEntity;
 import com.majorProject.iesApp.adminModule.entity.UserEntity;
 import com.majorProject.iesApp.adminModule.repo.EligibleRepo;
 import com.majorProject.iesApp.adminModule.repo.PlanRepo;
 import com.majorProject.iesApp.adminModule.repo.UserRepository;
 import com.majorProject.iesApp.adminModule.service.UserService;
 import com.majorProject.iesApp.adminModule.utils.EmailUtils;
+
+import io.swagger.v3.oas.models.Paths;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -41,14 +45,14 @@ public class UserServiceImpl implements UserService {
 		UserEntity entity= repo.findByEmailAndUserPwd(loginForm.getEmail(), loginForm.getUserPwd());
 		
 		if(entity==null) {
-			return "Invalid Credentials";
+			return AppConstants.INVALID_CRED;
 		}
 		
-		if("Y".equals(entity.getAccountSwch()) && "UNLOCKED".equals(entity.getActiveStatus())) {
-			return "success";
+		if(AppConstants.Y_STR. equals(entity.getAccountSwch()) && AppConstants.UNLOCKED.equals(entity.getActiveStatus())) {
+			return AppConstants.SUCCESS;
 			
 		}else {
-			return "Account Locked Or InActive";
+			return AppConstants.USERAc_LOCKED;
 		}
 		
 	}
@@ -60,12 +64,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean recoverPassword(String email) {
 		UserEntity entity=repo.findByEmail(email);
+		AccountServiceImpl impl= new AccountServiceImpl();
 
 		if(null== entity) {
 			return false;
 		}else {
-			String body="";
-			String subject="";
+			String body=AppConstants.RECOVER_PWD;
+			String subject= impl.readEmailBody(AppConstants.FORGOT_PWD_FILE, entity);
 			
 			return utils.sendEmail(email, subject, body);
 			
@@ -82,11 +87,11 @@ public class UserServiceImpl implements UserService {
 		List<EligibilityEntity> eligList= eligRepo.findAll();
 		
 		Long approvedCount=
-				eligList.stream().filter(ed->ed.getPlanStatus().equals("AP")).count();
+				eligList.stream().filter(ed->ed.getPlanStatus().equals(AppConstants.AP)).count();
 		
 		
 		Long deniedCount=
-				eligList.stream().filter(ed->ed.getPlanStatus().equals("DN")).count();
+				eligList.stream().filter(ed->ed.getPlanStatus().equals(AppConstants.DN)).count();
 	
 		Double totalBenefitAmt=
 				eligList.stream().mapToDouble(ed-> ed.getBenefitAmt()).sum();
@@ -106,7 +111,6 @@ public class UserServiceImpl implements UserService {
 
 
 
-
 	@Override
 	public UserAccountForm getUserByEmail(String email) {
 		UserEntity userEntity= repo.findByEmail(email);
@@ -115,6 +119,6 @@ public class UserServiceImpl implements UserService {
 		BeanUtils.copyProperties(userEntity, user);
 		return user;
 	}
-
+	
 	
 }

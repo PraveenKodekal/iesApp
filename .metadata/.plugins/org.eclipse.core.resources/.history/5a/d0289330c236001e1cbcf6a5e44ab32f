@@ -1,0 +1,14 @@
+package com.majorProject.iesApp.adminModule.exception;
+
+import java.time.LocalDate;
+
+import lombok.Getter;
+import lombok.Setter;
+
+public class AppException {
+
+	private String exCode;
+	private String exDec;
+	private LocalDate exDate;
+
+}

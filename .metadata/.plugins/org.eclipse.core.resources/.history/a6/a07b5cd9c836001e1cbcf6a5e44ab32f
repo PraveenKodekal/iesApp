@@ -1,0 +1,93 @@
+package com.majorProject.iesApp.adminModule.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.majorProject.iesApp.adminModule.binding.PlanForm;
+import com.majorProject.iesApp.adminModule.constants.AppConstants;
+import com.majorProject.iesApp.adminModule.entity.PlansEntity;
+import com.majorProject.iesApp.adminModule.repo.PlanRepo;
+import com.majorProject.iesApp.adminModule.service.PlanService;
+
+/**
+ * @author Admin
+ *
+ */
+@Service
+public class PlanServiceImpl implements PlanService {
+
+	@Autowired
+	private PlanRepo repo;
+
+	/**
+	 * @author create plan
+	 *
+	 */
+
+	@Override
+	public boolean createPlan(PlanForm form) {
+
+		PlansEntity entity = new PlansEntity();
+		BeanUtils.copyProperties(form, entity);
+		entity.setActiveSw(AppConstants.Y_STR);
+		entity.setPlanStatus(AppConstants.LOCKED);
+		System.out.println(AppConstants.PLAN_CREATED);
+		repo.save(entity);
+
+		return true;
+	}
+
+	/**
+	 * @author view All Plans
+	 *
+	 */
+	@Override
+	public List<PlanForm> fetchPlans() {
+
+		List<PlansEntity> entity = repo.findAll();
+
+		List<PlanForm> formData = new ArrayList<PlanForm>();
+
+		for (PlansEntity plans : entity) {
+			PlanForm planForm = new PlanForm();
+			BeanUtils.copyProperties(plans, planForm);
+			formData.add(planForm);
+
+		}
+		return formData;
+	}
+
+	/**
+	 * @implNote Based on the userId retrive the record and make edit and update the
+	 *           record if the given id record not available return null
+	 *
+	 */
+	@Override
+	public PlanForm planEditById(Integer planId) {
+
+		Optional<PlansEntity> optional = repo.findById(planId);
+		if (optional.isPresent()) {
+			PlansEntity entity = optional.get();
+			PlanForm form = new PlanForm();
+			BeanUtils.copyProperties(entity, form);
+			return form;
+		}
+		return null;
+	}
+
+	@Override
+	public String changePlanStatus(Integer planId, String planStatus) {
+
+		int cnt = repo.updatePlanStatus(planId, planStatus);
+		if (cnt > 0) {
+			return "plan status changed";
+		}
+		return "plan status not changed";
+	}
+
+}

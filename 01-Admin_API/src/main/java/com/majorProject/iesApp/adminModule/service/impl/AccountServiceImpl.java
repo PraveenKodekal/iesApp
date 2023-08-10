@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.majorProject.iesApp.adminModule.binding.UnlockAccountForm;
 import com.majorProject.iesApp.adminModule.binding.UserAccountForm;
+import com.majorProject.iesApp.adminModule.constants.AppConstants;
 import com.majorProject.iesApp.adminModule.entity.UserEntity;
 import com.majorProject.iesApp.adminModule.repo.UserRepository;
 import com.majorProject.iesApp.adminModule.service.AccountService;
@@ -53,19 +54,19 @@ public class AccountServiceImpl implements AccountService {
 
 		
 		// send email
-				String subject = "User Registration";
-				String body = readEmailBody("REG_EMAIL_BODY.txt", user);
+				String subject = AppConstants.UESR_REGISTER;
+				String body = readEmailBody(AppConstants.REG_MAIL_BODY_FILE, user);
 				return emailUtils.sendEmail(subject, body, userForm.getEmail());
 		
 	}
 
-	private String readEmailBody(String filename, UserEntity user) {
+	public String readEmailBody(String filename, UserEntity user) {
 		StringBuilder sb = new StringBuilder();
 		try (Stream<String> lines = Files.lines(Paths.get(filename))) {
 			lines.forEach(line -> {
-				line = line.replace("${FNAME}", user.getUserName());
-				line = line.replace("${TEMP_PWD}", user.getUserPwd());
-				line = line.replace("${EMAIL}", user.getEmail());
+				line = line.replace(AppConstants.FNAME, user.getUserName());
+				line = line.replace(AppConstants.PWD, user.getUserPwd());
+				line = line.replace(AppConstants.EMAIL, user.getEmail());
 				sb.append(line);
 			});
 		} catch (Exception e) {
@@ -125,10 +126,10 @@ public class AccountServiceImpl implements AccountService {
 
 		int cnt = repo.updateAccStatus(userId, status);
 		if (cnt > 0) {
-			return "Status Changed";
+			return AppConstants.STATUS_CHANGED;
 		}
 
-		return "status not changed";
+		return AppConstants.STATUS_NOT_CHANGED;
 	}
 
 	@Override
@@ -136,10 +137,10 @@ public class AccountServiceImpl implements AccountService {
 
 		UserEntity entity = repo.findByEmail(unlockForm.getEmail());
 		entity.setUserPwd(unlockForm.getNewPwd());
-		entity.setActiveStatus("UNLOCKED");
+		entity.setActiveStatus(AppConstants.UNLOCKED);
 
 		repo.save(entity);
-		return "Account Unlocked";
+		return AppConstants.AC_UNLOCKED;
 	}
 
 	// To generate Otp
@@ -151,7 +152,7 @@ public class AccountServiceImpl implements AccountService {
 		System.out.print("You OTP is : ");
 
 		// Using numeric values
-		String numbers = "0123456789";
+		String numbers = AppConstants.OTP_GENERATE_NUM;
 
 		// Using random method
 		Random rndm_method = new Random();

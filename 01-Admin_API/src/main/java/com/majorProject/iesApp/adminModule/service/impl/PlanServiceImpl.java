@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.majorProject.iesApp.adminModule.binding.PlanForm;
+import com.majorProject.iesApp.adminModule.constants.AppConstants;
 import com.majorProject.iesApp.adminModule.entity.PlansEntity;
 import com.majorProject.iesApp.adminModule.repo.PlanRepo;
 import com.majorProject.iesApp.adminModule.service.PlanService;
@@ -33,9 +34,9 @@ public class PlanServiceImpl implements PlanService {
 
 		PlansEntity entity = new PlansEntity();
 		BeanUtils.copyProperties(form, entity);
-		entity.setActiveSw("Y");
-		entity.setPlanStatus("LOCKED");
-		System.out.println("Plan Created");
+		entity.setActiveSw(AppConstants.Y_STR);
+		entity.setPlanStatus(AppConstants.LOCKED);
+		System.out.println(AppConstants.PLAN_CREATED);
 		repo.save(entity);
 
 		return true;
@@ -84,9 +85,9 @@ public class PlanServiceImpl implements PlanService {
 
 		int cnt = repo.updatePlanStatus(planId, planStatus);
 		if (cnt > 0) {
-			return "plan status changed";
+			return AppConstants.PLAN_STATUS_CHANGED;
 		}
-		return "plan status not changed";
+		return AppConstants.PLAN_STATUS_NOT_CHANGED;
 	}
 
 }
